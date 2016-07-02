@@ -1,0 +1,25 @@
+{
+  "intents": [
+    {
+      "intent": "AddRoleIntent",
+      "slots": [
+        {
+          "name": "RoleName",
+          "type": "LIST_OF_ROLES"
+        }
+      ]
+    },
+    {
+      "intent": "NewGameIntent"
+    },
+    {
+      "intent": "AMAZON.HelpIntent"
+    },
+    {
+      "intent": "AMAZON.StopIntent"
+    },
+    {
+      "intent": "AMAZON.CancelIntent"
+    }
+  ]
+}

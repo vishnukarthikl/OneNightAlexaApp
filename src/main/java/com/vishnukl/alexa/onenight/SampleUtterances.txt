@@ -1,0 +1,9 @@
+NewGameIntent begin a game
+NewGameIntent start a game
+
+AddRoleIntent add player {RoleName}
+AddRoleIntent add {RoleName}
+AddRoleIntent add {RoleName} to the game
+AddRoleIntent add player {RoleName} to the game
+AddRoleIntent add {RoleName} to the game
+AddRoleIntent {RoleName}
