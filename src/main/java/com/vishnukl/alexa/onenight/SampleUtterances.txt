@@ -1,9 +1,11 @@
-NewGameIntent begin a game
-NewGameIntent start a game
-
-AddRoleIntent add player {RoleName}
+AddRoleIntent add role {RoleName}
 AddRoleIntent add {RoleName}
 AddRoleIntent add {RoleName} to the game
-AddRoleIntent add player {RoleName} to the game
+AddRoleIntent add role {RoleName} to the game
 AddRoleIntent add {RoleName} to the game
 AddRoleIntent {RoleName}
+
+StartGameIntent start the game
+StartGameIntent start narration
+StartGameIntent start narrating
+StartGameIntent start narrating the game

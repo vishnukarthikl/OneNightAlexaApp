@@ -2,16 +2,33 @@ package com.vishnukl.alexa.onenight;
 
 import com.amazon.speech.slu.Intent;
 import com.amazon.speech.speechlet.*;
-import com.amazon.speech.ui.PlainTextOutputSpeech;
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class OneNightSpeechlet implements Speechlet {
-    @Override
-    public void onSessionStarted(SessionStartedRequest sessionStartedRequest, Session session) throws SpeechletException {
+    private static final Logger log = LoggerFactory.getLogger(OneNightSpeechlet.class);
+    private AmazonDynamoDBClient amazonDynamoDBClient;
+    private OneNightGameNarrator oneNightGameNarrator;
 
+    @Override
+    public void onSessionStarted(SessionStartedRequest request, Session session) throws SpeechletException {
+        log.info("onSessionStarted requestId={}, sessionId={}", request.getRequestId(),
+                session.getSessionId());
+        initializeComponents();
+    }
+
+    private void initializeComponents() {
+        if (amazonDynamoDBClient == null) {
+            amazonDynamoDBClient = new AmazonDynamoDBClient();
+            oneNightGameNarrator = new OneNightGameNarrator(amazonDynamoDBClient);
+        }
     }
 
     @Override
-    public SpeechletResponse onLaunch(LaunchRequest launchRequest, Session session) throws SpeechletException {
+    public SpeechletResponse onLaunch(LaunchRequest request, Session session) throws SpeechletException {
+        log.info("onLaunch requestId={}, sessionId={}", request.getRequestId(),
+                session.getSessionId());
         return null;
     }
 
@@ -20,19 +37,14 @@ public class OneNightSpeechlet implements Speechlet {
         Intent intent = intentRequest.getIntent();
         String intentName = (intent != null) ? intent.getName() : null;
 
-        if ("NewGameIntent".equals(intentName)) {
-            return getNewGameIntent();
+        if ("AddRoleIntent".equals(intentName)) {
+            return oneNightGameNarrator.addRole(intent, session);
+
+        } else if ("StartGameIntent".equals(intentName)) {
+            return oneNightGameNarrator.startGame(session);
         } else {
             throw new SpeechletException("Invalid Intent");
         }
-    }
-
-    private SpeechletResponse getNewGameIntent() {
-        String speechText = "Starting a new game";
-        PlainTextOutputSpeech speech = new PlainTextOutputSpeech();
-        speech.setText(speechText);
-
-        return SpeechletResponse.newTellResponse(speech);
     }
 
     @Override
