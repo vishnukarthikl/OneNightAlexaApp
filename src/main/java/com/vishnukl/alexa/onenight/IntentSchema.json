@@ -4,6 +4,23 @@
       "intent": "AddRoleIntent",
       "slots": [
         {
+          "name": "RoleCount",
+          "type": "AMAZON.NUMBER"
+        },
+        {
+          "name": "RoleName",
+          "type": "LIST_OF_ROLES"
+        }
+      ]
+    },
+    {
+      "intent": "RemoveRoleIntent",
+      "slots": [
+        {
+          "name": "RoleCount",
+          "type": "AMAZON.NUMBER"
+        },
+        {
           "name": "RoleName",
           "type": "LIST_OF_ROLES"
         }

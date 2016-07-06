@@ -39,7 +39,8 @@ public class OneNightSpeechlet implements Speechlet {
 
         if ("AddRoleIntent".equals(intentName)) {
             return oneNightGameNarrator.addRole(intent, session);
-
+        } else if ("RemoveRoleIntent".equals(intentName)) {
+            return oneNightGameNarrator.removeRole(intent, session);
         } else if ("StartGameIntent".equals(intentName)) {
             return oneNightGameNarrator.startGame(session);
         } else {

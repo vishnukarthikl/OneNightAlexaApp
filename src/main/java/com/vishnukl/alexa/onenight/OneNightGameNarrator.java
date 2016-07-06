@@ -15,6 +15,7 @@ import java.util.List;
 
 public class OneNightGameNarrator {
     private static final String SLOT_ROLE_NAME = "RoleName";
+    private static final String SLOT_ROLE_COUNT = "RoleCount";
     private final RoleCountDao roleCountDao;
     private final AllRoles allRoles = new AllRoles();
 
@@ -27,18 +28,47 @@ public class OneNightGameNarrator {
 
     public SpeechletResponse addRole(Intent intent, Session session) {
         String newRoleName = intent.getSlot(SLOT_ROLE_NAME).getValue();
+        Integer roleCount = getCount(intent);
         OneNightGame game = roleCountDao.getOneNightGame(session);
         if (game == null) {
             game = OneNightGame.newInstance(session, OneNightGameData.newInstance());
         }
 
-        game.addRole(newRoleName);
+        game.addRole(newRoleName, roleCount);
         roleCountDao.saveGame(game);
 
-        String speechText = newRoleName + " has been added ";
+        String speechText = newRoleName + " has been added.";
         PlainTextOutputSpeech speech = new PlainTextOutputSpeech();
         speech.setText(speechText);
         return SpeechletResponse.newTellResponse(speech);
+    }
+
+    public SpeechletResponse removeRole(Intent intent, Session session) {
+        String newRoleName = intent.getSlot(SLOT_ROLE_NAME).getValue();
+        Integer roleCount = getCount(intent);
+
+        OneNightGame game = roleCountDao.getOneNightGame(session);
+        if (game == null) {
+            game = OneNightGame.newInstance(session, OneNightGameData.newInstance());
+        }
+
+        game.removeRole(newRoleName, roleCount);
+        roleCountDao.saveGame(game);
+
+        String speechText = newRoleName + " has been removed.";
+        PlainTextOutputSpeech speech = new PlainTextOutputSpeech();
+        speech.setText(speechText);
+        return SpeechletResponse.newTellResponse(speech);
+    }
+
+    private Integer getCount(Intent intent) {
+        String value = intent.getSlot(SLOT_ROLE_COUNT).getValue();
+        Integer roleCount;
+        if (value != null)
+            roleCount = Integer.valueOf(value);
+        else
+            roleCount = 1;
+        return roleCount;
     }
 
     public SpeechletResponse startGame(Session session) {

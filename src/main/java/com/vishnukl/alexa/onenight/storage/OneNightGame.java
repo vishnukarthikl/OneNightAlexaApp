@@ -3,6 +3,7 @@ package com.vishnukl.alexa.onenight.storage;
 import com.amazon.speech.speechlet.Session;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Represents a score keeper game.
@@ -45,8 +46,8 @@ public final class OneNightGame {
         return gameData.getRoles().size();
     }
 
-    public void addRole(String role) {
-        gameData.increment(role, 1);
+    public void addRole(String role, int count) {
+        gameData.increment(role, count);
     }
 
     public boolean hasRole(String playerName) {
@@ -60,5 +61,17 @@ public final class OneNightGame {
 
     public List<String> getRoles() {
         return this.gameData.getRoles();
+    }
+
+    public void removeRole(String role, Integer count) {
+        Map<String, Integer> roleCounter = this.gameData.getCount();
+        if (roleCounter.containsKey(role)) {
+            int newCount = roleCounter.get(role) - count;
+            if (newCount < 0) {
+                newCount = 0;
+                this.gameData.getRoles().remove(role);
+            }
+            roleCounter.put(role, newCount);
+        }
     }
 }
